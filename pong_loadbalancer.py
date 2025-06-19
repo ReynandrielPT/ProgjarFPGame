@@ -57,5 +57,5 @@ class PongLoadBalancer(HttpServer):
             return f"HTTP/1.1 404 Not Found\r\n\r\n{error_body}".encode('utf-8')
 
 if __name__ == "__main__":
-    lb = PongLoadBalancer(host='127.0.0.1', port=5000)
+    lb = PongLoadBalancer(host='127.0.0.1', port=8000)
     lb.start()
