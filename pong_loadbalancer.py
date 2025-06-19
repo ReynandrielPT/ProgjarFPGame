@@ -1,4 +1,4 @@
-# 
+# pong_loadbalancer.py
 
 from http import HttpServer
 import itertools
@@ -9,10 +9,12 @@ WORKER_ADDRESSES = [('127.0.0.1', 8001), ('127.0.0.1', 8002)]
 game_to_worker_map = {}
 
 class PongLoadBalancer(HttpServer):
+    # --- PERBAIKAN DIMULAI DI SINI ---
     def __init__(self, host, port):
         super().__init__(host, port)
         self.worker_cycler = itertools.cycle(WORKER_ADDRESSES)
         print("Pong Load Balancer is ready.")
+    # --- PERBAIKAN SELESAI ---
 
     def get_game_id(self, path, body):
         if path.startswith('/state/') or path.startswith('/join_game/'):
@@ -35,12 +37,14 @@ class PongLoadBalancer(HttpServer):
             chosen_worker_addr = next(self.worker_cycler)
             print(f"Assigning new game to {chosen_worker_addr}")
             response = self.forward_request(chosen_worker_addr, raw_request_data)
-            
-            resp_body_str = response.decode('utf-8').split('\r\n\r\n', 1)[1]
-            game_id = json.loads(resp_body_str).get('game_id')
-            if game_id:
-                game_to_worker_map[game_id] = chosen_worker_addr
-                print(f"Game {game_id} is now mapped to {chosen_worker_addr}")
+            try:
+                resp_body_str = response.decode('utf-8').split('\r\n\r\n', 1)[1]
+                game_id = json.loads(resp_body_str).get('game_id')
+                if game_id:
+                    game_to_worker_map[game_id] = chosen_worker_addr
+                    print(f"Game {game_id} is now mapped to {chosen_worker_addr}")
+            except (IndexError, json.JSONDecodeError) as e:
+                print(f"Could not parse game_id from worker response: {e}")
             return response
         
         game_id = self.get_game_id(path, body)
