@@ -97,6 +97,6 @@ def run_loadbalancer(host, port):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Pong Load Balancer Server")
     parser.add_argument('--port', type=int, default=5000, help='Port for the load balancer')
-    parser.add_argument('--host', type=str, default='127.0.0.1', help='Host to run on')
+    parser.add_argument('--host', type=str, default='172.16.16.101', help='Host to run on')
     args = parser.parse_args()
     run_loadbalancer(args.host, args.port)
