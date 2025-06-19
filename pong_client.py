@@ -10,7 +10,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Distributed Pong")
 font = pygame.font.Font(None, 74)
 small_font = pygame.font.Font(None, 36)
-LOAD_BALANCER_ADDR = ('127.0.0.1', 8000)
+LOAD_BALANCER_ADDR = ('127.0.0.1', 5000)
 WHITE, BLACK = (255, 255, 255), (0, 0, 0)
 
 game_id, player_id = None, None
